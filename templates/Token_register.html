@@ -1,0 +1,57 @@
+<html>
+
+<head>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                    crossorigin="anonymous">
+          <link rel="stylesheet" href="/static/css/update.css">
+          <title>Register User</title>
+</head>
+
+<br><br>
+<h1 class="display-4">  You Can Register Here!</h1><br><br>
+
+<body>
+
+          <div class="container-fluid">
+
+                    <form action="/register/" method="post">
+                              {% csrf_token %}
+
+
+                              <div class="form-row align-items-center">
+                                        <input type="text" name="txt_fname" aria-label="First Name"
+                                                  placeholder="First Name" class="form-control mb-2" required>
+                              </div>
+
+
+                              <div class="form-row align-items-center">
+                                        <input type="text" name="txt_email" aria-label="Email"
+                                                  placeholder="Email" class="form-control mb-2" required>
+                              </div>
+
+
+                              <div class="form-row align-items-center">
+                                        <input type="password" name="txt_password" 
+                                                  aria-label="Password" placeholder="Password"
+                                                  class="form-control mb-2" required>
+                              </div><br><br>
+
+
+                              <button class="btn btn-outline-success" type="submit" value="register">Register</button>
+                              <a href="/login/" class="btn btn-outline-primary">Login Page</a>
+
+                    </form>
+                    {%if token%}
+                    <h4> Token Generated Successfully</h4>
+                    <div class="alert alert-success">{{token}}</div>
+                    {%endif%}<br><br>
+
+                    {%if msg%}
+                    <!-- <h4> Token Generated Successfully</h4> -->
+                    <div class="alert alert-danger">{{msg}}</div>
+                    {%endif%}<br><br>
+          </div>
+</body>
+
+</html>

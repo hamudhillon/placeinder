@@ -1,0 +1,27 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		crossorigin="anonymous">
+
+
+</head>
+
+<br><br>
+
+<div class="jumbotron">
+	<h1 class="display-4">Hello, Admin!</h1>
+	<p class="lead">Click On Logout</p>
+	<hr class="my-4">
+	<p>You can logout from here.</p>
+	<a class="btn btn-primary btn-lg" href="/logout/" role="button">Logout</a>
+	<a class="btn btn-primary btn-lg" href="/api/" role="button">Api</a>
+</div>
+
+{%if msg1%}
+<h3>Token to Login For Source Check Api</h3>
+<div class="alert alert-success">{{msg1}}</div>
+{%endif%}<br>
+
+</html>

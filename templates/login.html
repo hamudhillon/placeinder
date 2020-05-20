@@ -1,0 +1,37 @@
+<html>
+<head>
+    {% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!--<link rel="stylesheet" href="/static/css/myfile.css">-->
+    <title>Login User</title>
+</head>
+<h1 class="display-4">You Can Login Here!</h1>
+<body>
+        <br><br>
+<div class="container">
+<form action= "/login/" method="post">
+    {% csrf_token %}
+
+    <div class="form-row align-items-center">
+
+    <input type="text" name="txt_username" class="form-control mb-2" placeholder="Email">
+    </div>
+    <div class="form-row align-items-center">
+
+    <input type="password" name="txt_password" class="form-control mb-2" placeholder="Password">
+    <br><br>
+    </div>
+    {%if msg1%}
+    <div class="alert alert-danger">{{msg1}}</div>
+    {%endif%}<br>
+    <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login">
+    <a href="/register/" class="btn btn-secondary btn-lg btn-block">Sign Up</a>
+
+    <br>
+    </form>
+</div>
+</body>
+</html>
+
+
+

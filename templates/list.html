@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+    <style>
+        /*custom font*/
+        
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+        /*basic reset*/
+        
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            height: 100%;
+            /*Image only BG fallback*/
+            /*background = gradient + image pattern combo*/
+            background: linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+        }
+        
+        body {
+            font-family: montserrat, arial, verdana;
+        }
+        /*form styles*/
+        
+        #result .row {
+            text-align: left;
+            font-size: 15px;
+        }
+        
+        .resultsTableLeft {
+            float: left;
+            position: relative;
+            width: 90%;
+            margin-bottom: 10px;
+        }
+        
+        .rr {
+            position: relative;
+            width: 100%;
+        }
+        
+        .rr .row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .res_head {
+            position: relative;
+            width: 100%;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .rr .pl-md-5 {
+            font-size: 20px;
+            color: green;
+            position: relative;
+        }
+        
+        .resultsTableRight {
+            float: right;
+            position: relative;
+            width: 10%;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        
+        #msform {
+            width: 90%;
+            margin: 50px auto;
+            text-align: center;
+            position: relative;
+        }
+        
+        #msform fieldset {
+            background: white;
+            border: 0 none;
+            border-radius: 3px;
+            box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+            padding: 20px 30px;
+            box-sizing: border-box;
+            width: 80%;
+            margin: 0 10%;
+            /*stacking fieldsets above each other*/
+            position: relative;
+        }
+        /*Hide all except first fieldset*/
+        
+        #msform fieldset:not(:first-of-type) {
+            display: none;
+        }
+        /*inputs*/
+        
+        #msform input,
+        #msform textarea {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: montserrat;
+            color: #2C3E50;
+            font-size: 13px;
+        }
+        /*buttons*/
+        
+        #msform .action-button {
+            width: 100px;
+            background: #27AE60;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 1px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+        
+        #msform .action-button:hover,
+        #msform .action-button:focus {
+            box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+        }
+        /*headings*/
+        
+        .fs-title {
+            font-size: 15px;
+            text-transform: uppercase;
+            color: #2C3E50;
+            margin-bottom: 10px;
+        }
+        
+        .fs-subtitle {
+            font-weight: normal;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        /*progressbar*/
+        
+        #progressbar {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            left: 50%;
+            margin-left: -50%;
+            margin-bottom: 30px;
+            /*CSS counters to number the steps*/
+            counter-reset: step;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #progressbar li {
+            list-style-type: none;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+            justify-content: left;
+            padding: 0 50px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        #progressbar li:before {
+            content: counter(step);
+            counter-increment: step;
+            width: 40px;
+            line-height: 40px;
+            display: block;
+            font-size: 10px;
+            color: #333;
+            background: white;
+            border-radius: 3px;
+            margin: 0 auto 5px auto;
+        }
+        /*progressbar connectors*/
+        
+        #progressbar li:after {
+            content: '';
+            width: 200%;
+            height: 2px;
+            background: white;
+            position: absolute;
+            left: -60%;
+            top: 10px;
+            z-index: -1;
+            /*put it behind the numbers*/
+        }
+        
+        #progressbar li:first-child:after,
+        #progressbar li:last-child:after {
+            /*connector not needed before the first step*/
+            content: none;
+            top: 10px;
+        }
+        /*marking active/completed steps green*/
+        /*The number of the step and the connector before it = green*/
+        
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: #27AE60;
+            color: white;
+        }
+        
+        .q1_body {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .q1_body #qIntroText {
+            margin-bottom: 10px;
+        }
+        
+        .q1_body label {
+            margin-right: 10px;
+        }
+        
+        .q1_body input[type=radio] {
+            margin-right: 5px;
+        }
+        
+        #pnlPageS_questions {
+            font-size: 12px;
+        }
+        
+        table {
+            font-size: 12px;
+        }
+        
+        .socket {
+            display: none;
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            left: 50%;
+            margin-left: -100px;
+            top: 50%;
+            z-index: 9999;
+            margin-top: -100px;
+        }
+        
+        .hex-brick {
+            background: #ABF8FF;
+            width: 30px;
+            height: 17px;
+            position: absolute;
+            top: 5px;
+            animation-name: fade;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+        }
+        
+        .h2 {
+            transform: rotate(60deg);
+            -webkit-transform: rotate(60deg);
+        }
+        
+        .h3 {
+            transform: rotate(-60deg);
+            -webkit-transform: rotate(-60deg);
+        }
+        
+        .gel {
+            height: 30px;
+            width: 30px;
+            transition: all .3s;
+            -webkit-transition: all .3s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+        
+        .center-gel {
+            margin-left: -15px;
+            margin-top: -15px;
+            animation-name: pulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            -webkit-animation-name: pulse;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+        }
+        
+        .c1 {
+            margin-left: -47px;
+            margin-top: -15px;
+        }
+        
+        .c2 {
+            margin-left: -31px;
+            margin-top: -43px;
+        }
+        
+        .c3 {
+            margin-left: 1px;
+            margin-top: -43px;
+        }
+        
+        .c4 {
+            margin-left: 17px;
+            margin-top: -15px;
+        }
+        
+        .c5 {
+            margin-left: -31px;
+            margin-top: 13px;
+        }
+        
+        .c6 {
+            margin-left: 1px;
+            margin-top: 13px;
+        }
+        
+        .c7 {
+            margin-left: -63px;
+            margin-top: -43px;
+        }
+        
+        .c8 {
+            margin-left: 33px;
+            margin-top: -43px;
+        }
+        
+        .c9 {
+            margin-left: -15px;
+            margin-top: 41px;
+        }
+        
+        .c10 {
+            margin-left: -63px;
+            margin-top: 13px;
+        }
+        
+        .c11 {
+            margin-left: 33px;
+            margin-top: 13px;
+        }
+        
+        .c12 {
+            margin-left: -15px;
+            margin-top: -71px;
+        }
+        
+        .c13 {
+            margin-left: -47px;
+            margin-top: -71px;
+        }
+        
+        .c14 {
+            margin-left: 17px;
+            margin-top: -71px;
+        }
+        
+        .c15 {
+            margin-left: -47px;
+            margin-top: 41px;
+        }
+        
+        .c16 {
+            margin-left: 17px;
+            margin-top: 41px;
+        }
+        
+        .c17 {
+            margin-left: -79px;
+            margin-top: -15px;
+        }
+        
+        .c18 {
+            margin-left: 49px;
+            margin-top: -15px;
+        }
+        
+        .c19 {
+            margin-left: -63px;
+            margin-top: -99px;
+        }
+        
+        .c20 {
+            margin-left: 33px;
+            margin-top: -99px;
+        }
+        
+        .c21 {
+            margin-left: 1px;
+            margin-top: -99px;
+        }
+        
+        .c22 {
+            margin-left: -31px;
+            margin-top: -99px;
+        }
+        
+        .c23 {
+            margin-left: -63px;
+            margin-top: 69px;
+        }
+        
+        .c24 {
+            margin-left: 33px;
+            margin-top: 69px;
+        }
+        
+        .c25 {
+            margin-left: 1px;
+            margin-top: 69px;
+        }
+        
+        .c26 {
+            margin-left: -31px;
+            margin-top: 69px;
+        }
+        
+        .c27 {
+            margin-left: -79px;
+            margin-top: -15px;
+        }
+        
+        .c28 {
+            margin-left: -95px;
+            margin-top: -43px;
+        }
+        
+        .c29 {
+            margin-left: -95px;
+            margin-top: 13px;
+        }
+        
+        .c30 {
+            margin-left: 49px;
+            margin-top: 41px;
+        }
+        
+        .c31 {
+            margin-left: -79px;
+            margin-top: -71px;
+        }
+        
+        .c32 {
+            margin-left: -111px;
+            margin-top: -15px;
+        }
+        
+        .c33 {
+            margin-left: 65px;
+            margin-top: -43px;
+        }
+        
+        .c34 {
+            margin-left: 65px;
+            margin-top: 13px;
+        }
+        
+        .c35 {
+            margin-left: -79px;
+            margin-top: 41px;
+        }
+        
+        .c36 {
+            margin-left: 49px;
+            margin-top: -71px;
+        }
+        
+        .c37 {
+            margin-left: 81px;
+            margin-top: -15px;
+        }
+        
+        .r1 {
+            animation-name: pulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .2s;
+            -webkit-animation-name: pulse;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .2s;
+        }
+        
+        .r2 {
+            animation-name: pulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .4s;
+            -webkit-animation-name: pulse;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .4s;
+        }
+        
+        .r3 {
+            animation-name: pulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .6s;
+            -webkit-animation-name: pulse;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .6s;
+        }
+        
+        .r1>.hex-brick {
+            animation-name: fade;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .2s;
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .2s;
+        }
+        
+        .r2>.hex-brick {
+            animation-name: fade;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .4s;
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .4s;
+        }
+        
+        .r3>.hex-brick {
+            animation-name: fade;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-delay: .6s;
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-delay: .6s;
+        }
+        
+        @keyframes pulse {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+            50% {
+                -webkit-transform: scale(0.01);
+                transform: scale(0.01);
+            }
+            100% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fade {
+            0% {
+                background: #ABF8FF;
+            }
+            50% {
+                background: #90BBBF;
+            }
+            100% {
+                background: #ABF8FF;
+            }
+        }
+        
+        @-webkit-keyframes pulse {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+            50% {
+                -webkit-transform: scale(0.01);
+                transform: scale(0.01);
+            }
+            100% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+        
+        @-webkit-keyframes fade {
+            0% {
+                background: #ABF8FF;
+            }
+            50% {
+                background: #389CA6;
+            }
+            100% {
+                background: #ABF8FF;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="socket">
+        <div class="gel center-gel">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c1 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c2 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c3 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c4 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c5 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c6 r1">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+
+        <div class="gel c7 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+
+        <div class="gel c8 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c9 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c10 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c11 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c12 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c13 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c14 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c15 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c16 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c17 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c18 r2">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c19 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c20 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c21 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c22 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c23 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c24 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c25 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c26 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c28 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c29 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c30 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c31 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c32 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c33 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c34 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c35 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c36 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c37 r3">
+            <div class="hex-brick h1"></div>
+            <div class="hex-brick h2"></div>
+            <div class="hex-brick h3"></div>
+        </div>
+
+    </div>
+    <!-- multistep form -->
+    <form id="msform" action="/pool" method="POST">
+        <!-- progressbar -->
+        <ul id="progressbar">
+            <li class="active">SHAPE ANALYSER</li>
+            <li>Surroundings</li>
+            <li>Health</li>
+            <li>Attitude</li>
+            <li>Parents</li>
+            <li>Eating</li>
+            <li>Result</li>
+        </ul>
+        <!-- fieldsets -->
+        <fieldset>
+            <h2 class="fs-title">THE SHAPE ANALYSER</h2>
+            <h3 class="fs-subtitle">The five SHAPE Analyser areas cover most of what affects your longevity. Just choose the answer which is most like you, even if it's not a perfect fit. The Analyser is designed for people 45 and over. Once you finish you will see your results,
+                the key areas you could address and the likely stages.</h3>
+            <hr style="border-color:green">
+            <br>
+
+            <div style="display: flex; justify-content:space-evenly;">
+
+                <div class="introQuestions">
+                    <p class="q1_body">
+                        <span id="qIntroText" style="font-weight:bold; margin-bottom:20px; ">Sex</span>
+                    </p>
+                    <p class="q1_body" style="display: flex;">
+                        <input id="rdbQ1A" type="radio" name="Q1" value="208-64"><label for="rdbQ1A">Male</label>
+                        <input id="rdbQ1B" type="radio" name="Q1" value="209-64"><label for="rdbQ1B">Female</label>
+                    </p>
+                </div>
+                <div class="introQuestions">
+                    <p class="q1_body">
+                        <span id="qIntroText" style="font-weight:bold; margin-bottom:20px; ">Age at next birthday</span>
+                    </p>
+                    <p class="q1_body">
+                        <select name="ddlAge" id="ddlAge">
+                            <option value="Please Select">Please Select</option>
+                            <option value="210-65">45</option>
+                            <option value="211-65">46</option>
+                            <option value="212-65">47</option>
+                            <option value="213-65">48</option>
+                            <option value="214-65">49</option>
+                            <option value="215-65">50</option>
+                            <option value="216-65">51</option>
+                            <option value="217-65">52</option>
+                            <option value="218-65">53</option>
+                            <option value="219-65">54</option>
+                            <option value="220-65">55</option>
+                            <option value="221-65">56</option>
+                            <option value="222-65">57</option>
+                            <option value="223-65">58</option>
+                            <option value="224-65">59</option>
+                            <option value="225-65">60</option>
+                            <option value="226-65">61</option>
+                            <option value="227-65">62</option>
+                            <option value="228-65">63</option>
+                            <option value="229-65">64</option>
+                            <option value="230-65">65</option>
+                            <option value="231-65">66</option>
+                            <option value="232-65">67</option>
+                            <option value="233-65">68</option>
+                            <option value="234-65">69</option>
+                            <option value="235-65">70</option>
+                            <option value="236-65">71</option>
+                            <option value="237-65">72</option>
+                            <option value="238-65">73</option>
+                            <option value="239-65">74</option>
+                            <option value="240-65">75</option>
+                            <option value="241-65">76</option>
+                            <option value="242-65">77</option>
+                            <option value="243-65">78</option>
+                            <option value="244-65">79</option>
+                            <option value="245-65">80</option>
+                            <option value="246-65">81</option>
+                            <option value="247-65">82</option>
+                            <option value="248-65">83</option>
+                            <option value="249-65">84</option>
+                            <option value="250-65">85</option>
+                            <option value="251-65">86</option>
+                            <option value="252-65">87</option>
+                            <option value="253-65">88</option>
+                            <option value="254-65">89</option>
+                            <option value="255-65">90</option>
+                            <option value="256-65">91</option>
+                            <option value="257-65">92</option>
+                            <option value="258-65">93</option>
+                            <option value="259-65">94</option>
+                            <option value="260-65">95</option>
+                            <option value="261-65">96</option>
+                            <option value="262-65">97</option>
+                            <option value="263-65">98</option>
+                            <option value="264-65">99</option>
+                            <option value="265-65">100</option>
+                            <option value="266-65">101</option>
+                            <option value="267-65">102</option>
+                            <option value="268-65">103</option>
+                            <option value="269-65">104</option>
+                            <option value="270-65">105</option>
+                            <option value="271-65">106</option>
+                            <option value="272-65">107</option>
+                            <option value="273-65">108</option>
+                            <option value="274-65">109</option>
+
+                        </select>
+                    </p>
+
+                </div>
+            </div>
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+        <fieldset>
+            <h2 class="fs-title">Surroundings</h2>
+            <h3 class="fs-subtitle">Surroundings includes external factors that can affect our longevity. As well as the physical environment, it includes social factors which are external to us and can affect our sense of well-being.
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText1">I like where I live</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl00" type="radio" name="qst1" value="277-67"><label for="ctl00">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl01" type="radio" name="qst1" value="278-67"><label for="ctl01">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest"><span id="qstText2">Except for pollen warnings, I get
+                                regular
+                                air pollution warnings where I live</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl02" type="radio" name="qst2" value="279-68"><label for="ctl02">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl03" type="radio" name="qst2" value="280-68"><label for="ctl03">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">3.</p>
+                        </td>
+                        <td class="quest"><span id="qstText3">I mostly work remaining seated at a
+                                desk</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl04" type="radio" name="qst3" value="281-69"><label for="ctl04">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl05" type="radio" name="qst3" value="282-69"><label for="ctl05">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">4.</p>
+                        </td>
+                        <td class="quest"><span id="qstText4">I drive more than 40,000km a
+                                year</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl06" type="radio" name="qst4" value="283-70"><label for="ctl06">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl07" type="radio" name="qst4" value="284-70"><label for="ctl07">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                <table cellspacing='20' style="border-left: 1px solid grey;">
+
+                    <tr>
+                        <td>
+                            <p class="num1">5.</p>
+                        </td>
+                        <td class="quest"><span id="qstText5">I interact with good friends less
+                                than
+                                weekly</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl08" type="radio" name="qst5" value="285-71"><label for="ctl08">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl09" type="radio" name="qst5" value="286-71"><label for="ctl09">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">6.</p>
+                        </td>
+                        <td class="quest"><span id="qstText6">I have a pet</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl10" type="radio" name="qst6" value="287-72"><label for="ctl10">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl11" type="radio" name="qst6" value="288-72"><label for="ctl11">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">7.</p>
+                        </td>
+                        <td class="quest"><span id="qstText7">I often feel lonely</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl12" type="radio" name="qst7" value="289-73"><label for="ctl12">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl13" type="radio" name="qst7" value="290-73"><label for="ctl13">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">8.</p>
+                        </td>
+                        <td class="quest"><span id="qstText8">I drop in to visit other family
+                                members
+                                whenever I like</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl14" type="radio" name="qst8" value="291-74"><label for="ctl14">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl15" type="radio" name="qst8" value="292-74"><label for="ctl15">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+
+
+
+
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+        <fieldset>
+            <h2 class="fs-title">Health</h2>
+            <h3 class="fs-subtitle">Health covers the current physical condition of our body and how we manage it.
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText9">I have high blood pressure (over 130/100)</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl16" type="radio" name="qst9" value="293-75"><label for="ctl16">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl17" type="radio" name="qst9" value="294-75"><label for="ctl17">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText10">I have elevated cholesterol (over 5.5 mmol/L)</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl18" type="radio" name="qst10" value="295-76"><label for="ctl18">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl19" type="radio" name="qst10" value="296-76"><label for="ctl19">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">3.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText11">I sleep less than 5 hours or more than 10 hours a night</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl20" type="radio" name="qst11" value="297-77"><label for="ctl20">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl21" type="radio" name="qst11" value="298-77"><label for="ctl21">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">4.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText12">I have bowel movements less than once every two
+                                days</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl22" type="radio" name="qst12" value="299-78"><label for="ctl22">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl23" type="radio" name="qst12" value="300-78"><label for="ctl23">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                <table cellspacing='20' style="border-left: 1px solid grey;">
+
+                    <tr>
+                        <td>
+                            <p class="num1">5.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText13">I have had a stroke or heart attack</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl24" type="radio" name="qst13" value="301-79"><label for="ctl24">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl25" type="radio" name="qst13" value="302-79"><label for="ctl25">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">6.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText14">I am more than 10kg overweight</span>
+                            <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                                <div style="display: flex; justify-content:space-between; width:50px;">
+                                    <input id="ctl26" type="radio" name="qst14" value="303-80"><label for="ctl26">Yes</label>
+                                </div>
+                                <div style="display: flex; justify-content:space-between; width:50px;">
+                                    <input id="ctl27" type="radio" name="qst14" value="304-80"><label for="ctl27">No</label>
+                                </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">7.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText15">I am a couch potato (no regular aerobics or resistance
+                                exercises)</span>
+                            <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                                <div style="display: flex; justify-content:space-between; width:50px;">
+                                    <input id="ctl28" type="radio" name="qst15" value="305-81"><label for="ctl28">Yes</label>
+                                </div>
+                                <div style="display: flex; justify-content:space-between; width:50px;">
+                                    <input id="ctl29" type="radio" name="qst15" value="306-81"><label for="ctl29">No</label>
+                                </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">8.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText16">I exercise vigorously for over 20 minutes at least
+                                three times weekly</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl30" type="radio" name="qst16" value="307-82"><label for="ctl30">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl31" type="radio" name="qst16" value="308-82"><label for="ctl31">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="num1">9.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText17">My work provides me with regular aerobic
+                                activity</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl32" type="radio" name="qst17" value="309-83"><label for="ctl32">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl33" type="radio" name="qst17" value="310-83"><label for="ctl33">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+
+        <fieldset>
+            <h2 class="fs-title">Attitude</h2>
+            <h3 class="fs-subtitle">Attitude covers how we see the future in respect of important elements of our lives such as work, relationships and our ability to come to terms with longevity.
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText18">I plan to keep working past the age of 60</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl34" type="radio" name="qst18" value="311-84"><label for="ctl34">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl35" type="radio" name="qst18" value="312-84"><label for="ctl35">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText19">I enjoy my work</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl36" type="radio" name="qst19" value="313-85"><label for="ctl36">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl37" type="radio" name="qst19" value="314-85"><label for="ctl37">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">3.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText20">I get pleasure from my family and/or friends</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl38" type="radio" name="qst20" value="315-86"><label for="ctl38">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl39" type="radio" name="qst20" value="316-86"><label for="ctl39">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">4.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText21">Stress eats away at me - I can't seem to shake it off</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl40" type="radio" name="qst21" value="317-87"><label for="ctl40">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl41" type="radio" name="qst21" value="318-87"><label for="ctl41">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="num1">5.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText22">I can shed stress (by praying, meditating, exercising, finding
+                                humour in everyday life, or other means)</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl42" type="radio" name="qst22" value="319-88"><label for="ctl42">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl43" type="radio" name="qst22" value="320-88"><label for="ctl43">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing='20' style="border-left: 1px solid grey;">
+
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">6.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText23">My love life gives me a lot of pleasure</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl44" type="radio" name="qst23" value="321-89"><label for="ctl44">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl45" type="radio" name="qst23" value="322-89"><label for="ctl45">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">7.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText24">Things keep getting worse as I get older</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl46" type="radio" name="qst24" value="323-90"><label for="ctl46">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl47" type="radio" name="qst24" value="324-90"><label for="ctl47">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">8.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText25">I have as much vigour as I did last year</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl48" type="radio" name="qst25" value="325-91"><label for="ctl48">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl49" type="radio" name="qst25" value="326-91"><label for="ctl49">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">10.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText27">I'm as happy now as I was when I was younger</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl52" type="radio" name="qst27" value="329-93"><label for="ctl52">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl53" type="radio" name="qst27" value="330-93"><label for="ctl53">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">11.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText28">As I get older, things are better than I thought they would
+                                be</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl54" type="radio" name="qst28" value="331-94"><label for="ctl54">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl55" type="radio" name="qst28" value="332-94"><label for="ctl55">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+
+
+        <fieldset>
+            <h2 class="fs-title">Parents</h2>
+            <h3 class="fs-subtitle">
+                Parents is the term used for our genetic makeup, which comes from our parents. Knowledge of the longevity and health of close relatives can also be relevant.
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText29">Did any grandparents live to 85</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl56" type="radio" name="qst29" value="333-95"><label for="ctl56">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl57" type="radio" name="qst29" value="334-95"><label for="ctl57">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText30">Did all grandparents reach 80</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl58" type="radio" name="qst30" value="335-96"><label for="ctl58">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl59" type="radio" name="qst30" value="336-96"><label for="ctl59">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">3.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText31">Did any parents or siblings have cancer, heart condition or
+                                juvenile diabetes before 50</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl60" type="radio" name="qst31" value="337-97"><label for="ctl60">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl61" type="radio" name="qst31" value="338-97"><label for="ctl61">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+                <table cellspacing='20' style="border-left: 1px solid grey;">
+
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">4.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText32">Did both parents die before 75 of non-accidental causes or
+                                require daily assistance before 75</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl62" type="radio" name="qst32" value="339-98"><label for="ctl62">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl63" type="radio" name="qst32" value="340-98"><label for="ctl63">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="num1">5.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText33">Did more than one of your parents/aunts
+                                /uncles/grandparents live to at least 90 in excellent health</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl64" type="radio" name="qst33" value="341-99"><label for="ctl64">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl65" type="radio" name="qst33" value="342-99"><label for="ctl65">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+
+        <fieldset>
+            <h2 class="fs-title">Eating</h2>
+            <h3 class="fs-subtitle">Eating includes all the things we put into our bodies, not just meals.
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText34">I smoke, but less than ten cigarettes a day</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl66" type="radio" name="qst34" value="343-100"><label for="ctl66">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl67" type="radio" name="qst34" value="344-100"><label for="ctl67">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText35">I smoke from 10 to 20 cigarettes a day</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl68" type="radio" name="qst35" value="345-101"><label for="ctl68">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl69" type="radio" name="qst35" value="346-101"><label for="ctl69">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">3.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText36">I smoke more than 20 cigarettes a day</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl70" type="radio" name="qst36" value="347-102"><label for="ctl70">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl71" type="radio" name="qst36" value="348-102"><label for="ctl71">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">4.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText37">I eat meat less than once per week</span>
+                        </td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl72" type="radio" name="qst37" value="349-103"><label for="ctl72">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl73" type="radio" name="qst37" value="350-103"><label for="ctl73">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="num1">5.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText38">I only occasionally eat fresh fruit and vegetables</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl74" type="radio" name="qst38" value="351-104"><label for="ctl74">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl75" type="radio" name="qst38" value="352-104"><label for="ctl75">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">6.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText39">I rarely eat a healthy breakfast (cereal, toast or
+                                fruit)</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl76" type="radio" name="qst39" value="353-105"><label for="ctl76">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl77" type="radio" name="qst39" value="354-105"><label for="ctl77">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">7.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText40">I eat nuts more than five times a week</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl78" type="radio" name="qst40" value="355-106"><label for="ctl78">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl79" type="radio" name="qst40" value="356-106"><label for="ctl79">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing='20' style="border-left: 1px solid grey;">
+
+
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">8.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText41">I drink more than 6 standard alcoholic drinks a day</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl80" type="radio" name="qst41" value="357-107"><label for="ctl80">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl81" type="radio" name="qst41" value="358-107"><label for="ctl81">No</label>
+
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">9.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText42">I drink beer, wine and spirits in moderate amounts
+                                (averaging about two drinks per day)</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl82" type="radio" name="qst42" value="359-108"><label for="ctl82">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl83" type="radio" name="qst42" value="360-108"><label for="ctl83">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">10.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText43">I cook fish, poultry and meat until it shows signs of
+                                charring</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl84" type="radio" name="qst43" value="361-109"><label for="ctl84">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl85" type="radio" name="qst43" value="362-109"><label for="ctl85">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">11.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText44">I usually avoid butter, cream, pastries and fried
+                                foods</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl86" type="radio" name="qst44" value="363-110"><label for="ctl86">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl87" type="radio" name="qst44" value="364-110"><label for="ctl87">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">12.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText45">I drink more than three cups of coffee a day</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl88" type="radio" name="qst45" value="365-111"><label for="ctl88">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl89" type="radio" name="qst45" value="366-111"><label for="ctl89">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <p class="num1">14.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText46">I drink tea daily</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl90" type="radio" name="qst46" value="367-112"><label for="ctl90">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl91" type="radio" name="qst46" value="368-112"><label for="ctl91">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">14.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText47">I try to get a suntan</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl92" type="radio" name="qst47" value="371-114"><label for="ctl92">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl93" type="radio" name="qst47" value="372-114"><label for="ctl93">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="next" class="next action-button" value="Next" />
+        </fieldset>
+
+        <fieldset id='result'>
+            <h2 class="fs-title"></h2>
+            <h3 class="fs-subtitle">
+                There are just a couple more questions before you are finished:
+            </h3>
+            <hr style="border-color:green">
+            <br>
+            <div style="display: flex; font-size:10px;justify-content:space-between; text-align:left;">
+                <table cellspacing='20'>
+
+                    <tr>
+                        <td>
+                            <p class="num1">1.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText48">I have completed tertiary education (TAFE diploma or university
+                                degree)</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl94" type="radio" name="qst48" value="373-115"><label for="ctl94">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl95" type="radio" name="qst48" value="374-115"><label for="ctl95">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p class="num1">2.</p>
+                        </td>
+                        <td class="quest">
+                            <span id="qstText49">I earn more than $72,000 a year before tax</span></td>
+                        <td class="quest" style="display:flex; justify-content:space-between;" align="right">
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl96" type="radio" name="qst49" value="375-116"><label for="ctl96">Yes</label>
+                            </div>
+                            <div style="display: flex; justify-content:space-between; width:50px;">
+                                <input id="ctl97" type="radio" name="qst49" value="376-116"><label for="ctl97">No</label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+
+                </table>
+            </div>
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="submit" name="submit" class="submit action-button" value="Submit" />
+        </fieldset>
+
+    </form>
+</body>
+<script>
+    $('form').on('submit', function(e) {
+        $('.socket').fadeIn(100);
+        e.preventDefault();
+        var pool = $(this).serialize()
+
+
+        $.ajax({
+            method: 'GET',
+            url: '/result',
+            data: JSON.stringify(pool),
+            success: function(data) {
+
+                $('.socket').fadeOut(100);
+                $('#result').html(data);
+                $('#result').prepend('<div class="res_head">Your Shape Results</div>');
+
+            }
+        });
+    });
+
+
+
+    //jQuery time
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var left, opacity, scale; //fieldset properties which we will animate
+    var animating; //flag to prevent quick multi-click glitches
+
+    $(".next").click(function() {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+
+        //activate next step on progressbar using the index of next_fs
+        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+        //show the next fieldset
+        next_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({
+            opacity: 0
+        }, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale current_fs down to 80%
+                scale = 1 - (1 - now) * 0.2;
+                //2. bring next_fs from the right(50%)
+                left = (now * 50) + "%";
+                //3. increase opacity of next_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({
+                    'transform': 'scale(' + scale + ')',
+                    'position': 'absolute'
+                });
+                next_fs.css({
+                    'left': left,
+                    'opacity': opacity
+                });
+            },
+            duration: 800,
+            complete: function() {
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+
+    $(".previous").click(function() {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        //de-activate current step on progressbar
+        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+        //show the previous fieldset
+        previous_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({
+            opacity: 0
+        }, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale previous_fs from 80% to 100%
+                scale = 0.8 + (1 - now) * 0.2;
+                //2. take current_fs to the right(50%) - from 0%
+                left = ((1 - now) * 50) + "%";
+                //3. increase opacity of previous_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({
+                    'left': left
+                });
+                previous_fs.css({
+                    'transform': 'scale(' + scale + ')',
+                    'opacity': opacity
+                });
+            },
+            duration: 800,
+            complete: function() {
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+</script>
+
+</html>

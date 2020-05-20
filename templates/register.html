@@ -1,0 +1,44 @@
+<html>
+    <head>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/signup.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+<body>
+    <form action="/register/" method="post">
+        {% csrf_token %}
+
+
+<div id="login-box">
+  <div class="left">
+    <h6> PUBG Sign up </h6><br>
+    <input type="text" name="txt_username" placeholder="Username" />
+    <input type="text" name="txt_email" placeholder="E-mail" />
+    <input type="text" name="txt_clan" placeholder="Clan" />
+    <input type="text" name="txt_phone" placeholder="Phone" />
+    <input type="password" name="txt_password" placeholder="Password" />
+    <input type="password" name="txt_password2" placeholder="Retype password" />
+    <input type="text" name="txt_payment" placeholder="Payment" />
+
+    </form>
+    <input type="submit" value="signup and pay"><br><br>
+    
+
+    {%if msg1%}
+    <div class="alert alert-danger">{{msg1}}</div>
+    {%endif%}<br><br>
+
+  </div>
+
+  
+  
+  <div class="right">
+    <img src="/static/Images/e3ff0cce-7617-4cdf-9bfe-c7010de80475.jpg" height="300" width="250">
+  </div>
+  <div class="or">Scan     </div>
+  
+</div>
+    
+</body>
+</html>
