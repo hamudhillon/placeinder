@@ -227,7 +227,7 @@ def Token_register(request):
                 objU.save()
                 token = Token.objects.create(user=objU)
                 token_key = token.key
-        return render(request, 'Token_register.html', {"token": token_key, "msg": msg})
+        return render(request, 'login.html', {"token": token_key, "msg": msg})
 
     except:
         import sys
